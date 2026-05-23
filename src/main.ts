@@ -4,6 +4,7 @@ import { ConfigService } from '@nestjs/config';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 
 import { AppModule } from './app.module';
+import * as C from './constants';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -26,21 +27,20 @@ async function bootstrap() {
     .build();
 
   const document = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('api/docs', app, document, {
+  SwaggerModule.setup(C.ROUTES.SWAGGER, app, document, {
     swaggerOptions: {
       persistAuthorization: true,
     },
   });
-  
+
   const configService = app.get(ConfigService);
   const port = configService.get<number>('PORT', 4000);
   await app.listen(port, '0.0.0.0');
 
   console.log(`🚀 Server is running on http://localhost:${port}`, 'Bootstrap');
   console.log(
-    `📘 Swagger documentation is available at http://localhost:${port}/api/docs`,
+    `📘 Swagger documentation is available at http://localhost:${port}/${C.ROUTES.SWAGGER}`,
     'Bootstrap',
   );
-
 }
 bootstrap();

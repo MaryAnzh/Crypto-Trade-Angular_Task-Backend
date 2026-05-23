@@ -1,3 +1,4 @@
 export const ROUTES = {
-    HEALTH: 'health'
+    HEALTH: 'health',
+    SWAGGER: 'api/docs'
 }
