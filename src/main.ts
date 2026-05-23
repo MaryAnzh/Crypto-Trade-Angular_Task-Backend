@@ -1,7 +1,9 @@
 import { NestFactory } from '@nestjs/core';
-import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
+import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
+
+import { AppModule } from './app.module';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -14,13 +16,29 @@ async function bootstrap() {
     }),
   );
 
+  // Swagger
+
+  const config = new DocumentBuilder()
+    .setTitle('CryptoTrade API')
+    .setDescription('API documentation for CryptoTrade backend')
+    .setVersion('1.0')
+    .addBearerAuth()
+    .build();
+
+  const document = SwaggerModule.createDocument(app, config);
+  SwaggerModule.setup('api/docs', app, document, {
+    swaggerOptions: {
+      persistAuthorization: true,
+    },
+  });
+  
   const configService = app.get(ConfigService);
   const port = configService.get<number>('PORT', 4000);
   await app.listen(port, '0.0.0.0');
 
   console.log(`🚀 Server is running on http://localhost:${port}`, 'Bootstrap');
   console.log(
-    `📘 Swagger documentation is available at http://localhost:${port}/doc`,
+    `📘 Swagger documentation is available at http://localhost:${port}/api/docs`,
     'Bootstrap',
   );
 
