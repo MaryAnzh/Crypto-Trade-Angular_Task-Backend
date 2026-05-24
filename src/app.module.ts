@@ -10,7 +10,9 @@ import { AuthModule } from './auth/auth.module';
 @Module({
   imports: [
     PrismaModule,
-    ConfigModule,
+    ConfigModule.forRoot({
+      isGlobal: true,
+    }),
     HealthModule,
     AuthModule
   ],
