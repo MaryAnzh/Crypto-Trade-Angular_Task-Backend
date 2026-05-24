@@ -4,6 +4,8 @@ import request from 'supertest';
 import { App } from 'supertest/types';
 import { AppModule } from './../src/app.module';
 
+import * as C from '../src/constants';
+
 describe('AppController (e2e)', () => {
   let app: INestApplication<App>;
 
@@ -16,11 +18,11 @@ describe('AppController (e2e)', () => {
     await app.init();
   });
 
-  it('/ (GET)', () => {
+  it(`/ (GET) -- get ${C.GREETING}`, () => {
     return request(app.getHttpServer())
       .get('/')
       .expect(200)
-      .expect('Hello World!');
+      .expect(C.GREETING);
   });
 
   afterEach(async () => {
