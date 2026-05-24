@@ -14,3 +14,4 @@ export const ROUTES_FOOL_PATHS = {
     LOGIN: `${AUTH}/${LOGIN}`,
     CURRENT_USER: `${AUTH}/${CURRENT_USER}`
 }
+export const IS_PUBLIC_KEY = 'isPublic';

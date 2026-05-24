@@ -50,26 +50,19 @@ export class AuthService {
         });
 
         if (!user) {
-            throw new UnauthorizedException(C.INVALID_CREDENTIALS);
+            throw new UnauthorizedException(C.INVALID_MAIL);
         }
 
         const valid = await bcrypt.compare(dto.password, user.passwordHash);
 
         if (!valid) {
-            throw new UnauthorizedException(C.INVALID_CREDENTIALS);
+            throw new UnauthorizedException(C.INVALID_PASS);
         }
 
         return this.generateToken(user);
     }
 
-    async me(userId: string): Promise<UserSafe> {
-        const user = await this.prisma.user.findUnique({
-            where: { id: userId },
-        });
-        if (!user) {
-            throw new UnauthorizedException(C.USER_NOT_EXIST);
-        }
-
+    async me(user: User): Promise<UserSafe> {
         return {
             id: user.id,
             email: user.email,
