@@ -35,6 +35,12 @@ async function bootstrap() {
 
   const configService = app.get(ConfigService);
   const port = configService.get<number>('PORT', 4000);
+  app.enableCors({
+    origin: '*',
+    methods: 'GET,POST,PUT,DELETE,OPTIONS',
+    allowedHeaders: '*',
+  });
+
   await app.listen(port, '0.0.0.0');
 
   console.log(`🚀 Server is running on http://localhost:${port}`, 'Bootstrap');
