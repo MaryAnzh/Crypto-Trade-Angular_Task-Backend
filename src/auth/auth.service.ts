@@ -23,8 +23,9 @@ export class AuthService {
         this.CRYPT_SALT = Number(this.config.get<number>('CRYPT_SALT', 10));
     }
 
-    safeUser({ id, email, createdAt }: User): UserSafe {
-        return { id, email, createdAt };
+    safeUser(user: User): UserSafe {
+        const { id, email, createdAt } = user;
+        return { id, email, createdAt, name: user.name ?? undefined };
     }
 
     async register(dto: RegisterDto): Promise<AuthResponse> {
@@ -42,6 +43,7 @@ export class AuthService {
             data: {
                 email: dto.email,
                 passwordHash,
+                name: dto.name ?? null,
             },
         });
 
