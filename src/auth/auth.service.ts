@@ -6,7 +6,7 @@ import { ConfigService } from '@nestjs/config';
 import type { User } from "@prisma/client";
 
 import * as C from '../constants';
-import type { JwtPayload, UserSafe } from "../models";
+import type { AuthResponse, JwtPayload, UserSafe } from "../models";
 
 import { LoginDto } from "./dto/login.dto";
 import { RegisterDto } from "./dto/register.dto";
@@ -23,7 +23,11 @@ export class AuthService {
         this.CRYPT_SALT = Number(this.config.get<number>('CRYPT_SALT', 10));
     }
 
-    async register(dto: RegisterDto): Promise<{ accessToken: string }> {
+    safeUser({ id, email, createdAt }: User): UserSafe {
+        return { id, email, createdAt };
+    }
+
+    async register(dto: RegisterDto): Promise<AuthResponse> {
         const exists = await this.prisma.user.findUnique({
             where: { email: dto.email },
         });
@@ -41,10 +45,13 @@ export class AuthService {
             },
         });
 
-        return this.generateToken(user);
+        return ({
+            accessToken: this.generateToken(user).accessToken,
+            user: this.safeUser(user)
+        });
     }
 
-    async login(dto: LoginDto): Promise<{ accessToken: string }> {
+    async login(dto: LoginDto): Promise<AuthResponse> {
         const user = await this.prisma.user.findUnique({
             where: { email: dto.email },
         });
@@ -59,7 +66,10 @@ export class AuthService {
             throw new UnauthorizedException(C.INVALID_PASS);
         }
 
-        return this.generateToken(user);
+        return ({
+            accessToken: this.generateToken(user).accessToken,
+            user: this.safeUser(user)
+        });
     }
 
     async me(user: User): Promise<UserSafe> {

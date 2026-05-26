@@ -36,7 +36,7 @@ describe('Auth (e2e)', () => {
             .post('/auth/login')
             .send({ email, password });
 
-        expect(res.status).toBe(201);
+        expect(res.status).toBe(200);
         expect(res.body.accessToken).toBeDefined();
 
         token = res.body.accessToken;
