@@ -25,7 +25,7 @@ export class AuthService {
 
     safeUser(user: User): UserSafe {
         const { id, email, createdAt } = user;
-        return { id, email, createdAt, name: user.name ?? undefined };
+        return { id, email, createdAt, name: user.name ?? null, avatarUrl: user.avatarUrl ?? null };
     }
 
     async register(dto: RegisterDto): Promise<AuthResponse> {
@@ -44,6 +44,7 @@ export class AuthService {
                 email: dto.email,
                 passwordHash,
                 name: dto.name ?? null,
+                avatarUrl: null
             },
         });
 
@@ -75,11 +76,7 @@ export class AuthService {
     }
 
     async me(user: User): Promise<UserSafe> {
-        return {
-            id: user.id,
-            email: user.email,
-            createdAt: user.createdAt,
-        };
+        return this.safeUser(user);
     }
 
     private generateToken(user: User) {

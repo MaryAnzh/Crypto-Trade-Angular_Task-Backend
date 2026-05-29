@@ -2,12 +2,13 @@ export const ROUTES = {
     HEALTH: 'health',
     SWAGGER: 'api/docs',
     AUTH: 'auth',
-
     REGISTER: 'register',
     LOGIN: 'login',
-    CURRENT_USER: 'me'
+    CURRENT_USER: 'me',
+    USER: 'user',
+    AVATAR: 'avatar'
 } as const;
-const { AUTH, REGISTER, LOGIN, CURRENT_USER } = ROUTES;
+export const { AUTH, REGISTER, LOGIN, CURRENT_USER, USER, AVATAR } = ROUTES;
 
 export const ROUTES_FOOL_PATHS = {
     REGISTER: `${AUTH}/${REGISTER}`,

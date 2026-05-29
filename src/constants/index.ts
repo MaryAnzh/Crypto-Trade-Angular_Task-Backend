@@ -1,2 +1,2 @@
-export * from './dictenary';
+export * from './dictionary';
 export * from './routes';
