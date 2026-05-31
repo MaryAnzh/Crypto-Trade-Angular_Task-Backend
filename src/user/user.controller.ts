@@ -1,5 +1,6 @@
 import { Body, Controller, Get, Put, Req, UseGuards } from '@nestjs/common';
-import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiBody, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { StatusCodes as SC } from 'http-status-codes';
 
 import * as C from '../constants';
 import { JwtAuthGuard } from '../auth/guards/jwt.guard';
@@ -23,6 +24,18 @@ export class UserController {
     }
 
     @ApiOperation({ summary: 'Update current user' })
+    @ApiBody({
+        description: 'User fields to update',
+        type: UpdateUserDto,
+    })
+    @ApiResponse({
+        status: SC.OK,
+        description: 'User updated successfully',
+    })
+    @ApiResponse({
+        status: SC.NOT_FOUND,
+        description: 'User not found',
+    })
     @Put()
     update(@User() { id }, @Body() dto: UpdateUserDto) {
         return this.userService.updateUser(id, dto);
